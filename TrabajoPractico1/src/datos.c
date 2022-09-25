@@ -1,14 +1,18 @@
 /*
- * prueba.c
+ * datos.c
  *
- *  Created on: 20 sept 2022
+ *  Created on: 25 sept 2022
  *      Author: natal_000
  */
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "prueba.h"
-
+#include "datos.h"
+/**
+ * \fn void mostrarMenu(void)
+ * \brief funcion que no retorna encargada de mostrar el menu
+ *
+ */
 void mostrarMenu(void) {
 	printf("\n1. Ingreso de los costos de Mantenimiento."
 
@@ -17,6 +21,16 @@ void mostrarMenu(void) {
 			"\n4. Informar todos los resultados."
 			"\n5. Salir");
 }
+/**
+ * \fn int utn_getNumero(char*, char*, int, int)
+ * \brief Pide un numero para ingresar a las opciones del menu
+ *
+ * \param mensaje
+ * \param mensajeError
+ * \param minimo
+ * \param maximo
+ * \return el numero ingresado
+ */
 int utn_getNumero(char *mensaje, char *mensajeError, int minimo, int maximo) {
 	int pResultado;
 	if (mensaje != NULL) {
@@ -28,7 +42,16 @@ int utn_getNumero(char *mensaje, char *mensajeError, int minimo, int maximo) {
 	}
 	return pResultado;
 }
-void ingresoCostos(int *bandera, int *sumaT, int *sumaH, int *sumaC,
+/**
+ * \fn void ingresoCostos(int*, int*, int*, int*)
+ * \brief le pedimos al usuario que seleccione que gasto desea ingresar y cuando lo hace lo acumulamos.
+ *
+ * \param sumaT acumulador de transporte
+ * \param sumaH acumulador de hospedaje
+ * \param sumaC acumulador de comida
+ * \param costoMantenimiento suma de todos los gastos ingresados
+ */
+void ingresoCostos( int *sumaT, int *sumaH, int *sumaC,
 		int *costoMantenimiento) {
 
 	char respuesta = 's';
@@ -37,8 +60,8 @@ void ingresoCostos(int *bandera, int *sumaT, int *sumaH, int *sumaC,
 	int numeroC;
 	char opcion;
 
-	*bandera = 1;
-	if (bandera != NULL && sumaT != NULL && sumaH != NULL && sumaC != NULL) {
+
+	if ( sumaT != NULL && sumaH != NULL && sumaC != NULL) {
 		while (respuesta == 's') {
 			utn_validacionCaracter(&opcion);
 			printf("Costo de hospedaje -> $ %d\n"
@@ -46,7 +69,7 @@ void ingresoCostos(int *bandera, int *sumaT, int *sumaH, int *sumaC,
 					"Costo de transporte -> $%d\n", *sumaH, *sumaC, *sumaT);
 			switch (opcion) {
 			case 't':
-				utn_validacioPrecio(&numeroT,"\nIngrese el monto del gasto selecionado: ","ERROR Ingrese un costo valido de 0 a 100000000",0,100000000);
+				utn_getNumeroPrecio(&numeroT,"\nIngrese el monto del gasto selecionado: ","ERROR Ingrese un costo valido de 0 a 100000000",0,100000000);
 				*sumaT = *sumaT + numeroT;
 				break;
 			case 'h':
@@ -67,17 +90,12 @@ void ingresoCostos(int *bandera, int *sumaT, int *sumaH, int *sumaC,
 		}
 	}
 }
-void utn_validacioPrecio(int*numero,char *mensaje,char*mensajeError,int minimo,int maximo)
-{
-	printf(mensaje);
-	scanf("%d", numero);
-	while(*numero<minimo||*numero>maximo)
-	{
-		printf(mensajeError);
-		scanf("%d",numero);
-	}
-}
-
+/**
+ * \fn void utn_validacionCaracter(char*)
+ * \brief Validacion para que ingrese las opciones correctas
+ *
+ * \param opcion devolvemos la opcion si se ingreso el correcto
+ */
 void utn_validacionCaracter(char *opcion){
 	if (opcion != NULL) {
 		printf("Ingrese tipo de gastos"
@@ -94,6 +112,32 @@ void utn_validacionCaracter(char *opcion){
 		}
 	}
 }
+/**
+ * \fn void utn_getNumeroPrecio(int*, char*, char*, int, int)
+ * \brief pedimos que ingrese un numero mayor a 0
+ *
+ * \param numero
+ * \param mensaje
+ * \param mensajeError
+ * \param minimo
+ * \param maximo
+ */
+void utn_getNumeroPrecio(int*numero,char *mensaje,char*mensajeError,int minimo,int maximo)
+{
+	printf(mensaje);
+	scanf("%d", numero);
+	while(*numero<minimo||*numero>maximo)
+	{
+		printf(mensajeError);
+		scanf("%d",numero);
+	}
+}
+/**
+ * \fn void utn_validacionConfederacion(int*)
+ * \brief validamos que solo pueda ingresar las opciones validas para las confederaciones
+ *
+ * \param opcion devolvemos la opcion si es correcta
+ */
 void utn_validacionConfederacion(int*opcion){
 		if (opcion != NULL){
 		printf("\nIngrese la confederacion:"
@@ -118,6 +162,18 @@ void utn_validacionConfederacion(int*opcion){
 			}
 		}
 }
+/**
+ * \fn void ingresarConfederacion(int*, int*, int*, int*, int*, int*)
+ * \brief Se carga la confederacion selecionada se va sumando por cada jugador ingresado
+ * segun la confederacion ingresada
+ *
+ * \param contadorAfc
+ * \param contadorCaf
+ * \param contadorConcaf
+ * \param contadorConmebol
+ * \param contadorUefa
+ * \param contadorOfc
+ */
 void ingresarConfederacion(int*contadorAfc,int*contadorCaf,int*contadorConcaf,int*contadorConmebol,int*contadorUefa,int*contadorOfc){
 	int confederacion;
 	utn_validacionConfederacion(&confederacion);
@@ -148,8 +204,17 @@ void ingresarConfederacion(int*contadorAfc,int*contadorCaf,int*contadorConcaf,in
 			"\nUEFA en Europa->%d"
 			"\nOFC en Oceania->%d\n",*contadorAfc,*contadorCaf,*contadorConcaf,*contadorConmebol,*contadorUefa,*contadorOfc);
 }
+/**
+ * \fn void utn_validacionPosicion(int*, char*, char*, int, int)
+ * \brief  devuelve por parametro si la opcion fue ingresada entre la opciones validas
+ *
+ * \param opcion
+ * \param mensaje
+ * \param mensajeError
+ * \param minimo
+ * \param maximo
+ */
 void utn_validacionPosicion(int *opcion,char*mensaje,char*mensajeError,int minimo,int maximo){
-
 	if (opcion != NULL)
 	{
 		printf(mensaje);
@@ -162,6 +227,16 @@ void utn_validacionPosicion(int *opcion,char*mensaje,char*mensajeError,int minim
 		}
    }
 }
+/**
+ * \fn void cargaPosicion(int*, int*, int*, int*, int*)
+ * \brief  Va contando las posiciones de cada jugador con sus respectivos contadores.
+ *
+ * \param contadorArqueros
+ * \param contadorDefensores
+ * \param contadorMediocampistas
+ * \param contadorDelanteros
+ * \param i contador de juagadores ingresados
+ */
 void cargaPosicion(int*contadorArqueros,int*contadorDefensores,int*contadorMediocampistas,int*contadorDelanteros,int*i)
 {
 	int posicion;
@@ -234,6 +309,11 @@ void cargaPosicion(int*contadorArqueros,int*contadorDefensores,int*contadorMedio
 				"\nMediocampistas->%d"
 				"\nDelanteros->%d\n",*contadorArqueros,*contadorDefensores,*contadorMediocampistas,*contadorDelanteros);
 }
+/**
+ * \fn void utn_validacionCamiseta(void)
+ * \brief  Ingresar entre el 0 y 100
+ *
+ */
 void utn_validacionCamiseta(void)
 {
 			int numero;
@@ -247,99 +327,31 @@ void utn_validacionCamiseta(void)
 					scanf("%d",&numero);
 				}
 }
-void cargaJugadores(int*banderaCostos,int *banderaCarga,int *contadorAfc,int *contadorCaf,int *contadorConcaf,int *contadorConmebol,int *contadorUefa, int *contadorOfc
+/**
+ * \fn void cargaJugadores(int*, int*, int*, int*, int*, int*, int*, int*, int*, int*, int*)
+ * \brief funcion a la que se ingresa en la main donde carga todas la anteriores camiseta, confederacion,posiscion
+ *
+ * \param contadorAfc
+ * \param contadorCaf
+ * \param contadorConcaf
+ * \param contadorConmebol
+ * \param contadorUefa
+ * \param contadorOfc
+ * \param contadorArqueros
+ * \param contadorDefensores
+ * \param contadorMediocampistas
+ * \param contadorDelanteros
+ * \param i
+ */
+void cargaJugadores(int *contadorAfc,int *contadorCaf,int *contadorConcaf,int *contadorConmebol,int *contadorUefa, int *contadorOfc
 					,int*contadorArqueros,int*contadorDefensores,int*contadorMediocampistas,int*contadorDelanteros,int*i)
 {
 
-if(banderaCostos!=NULL && banderaCarga!=NULL && contadorAfc!=NULL && contadorCaf!=NULL && contadorConcaf!=NULL && contadorConmebol!=NULL && contadorUefa!=NULL && contadorOfc!=NULL)
+if( contadorAfc!=NULL && contadorCaf!=NULL && contadorConcaf!=NULL && contadorConmebol!=NULL && contadorUefa!=NULL && contadorOfc!=NULL)
 {
-	if(*banderaCostos==1)
-	{
-		*banderaCarga=1;
+
 		utn_validacionCamiseta();
 		ingresarConfederacion(contadorAfc,contadorCaf,contadorConcaf,contadorConmebol,contadorUefa,contadorOfc);
 		cargaPosicion(contadorArqueros,contadorDefensores,contadorMediocampistas,contadorDelanteros,i);
-	}
 }
-}
-void realizarCalculos(int*banderaCostos,int*banderaCarga,int*banderaCalculos,int*banderadaCalculos,int*i,int*contadorAfc,int*contadorCaf,int*contadorConcaf,int*contadorConmebol,int*contadorUefa,int*contadorOfc,float*promedioAfc,float* promedioCaf,float*promedioConcaf,float*promedioConmebol,float*promedioUefa,float*promedioOfc)
-{
-	if(banderaCostos!=NULL&&banderaCarga!=NULL&&*banderaCostos==1&&*banderaCarga==1)
-		{
-		   if(utn_promedioMercados(i,contadorAfc,contadorCaf,contadorConcaf,contadorConmebol,contadorUefa,contadorOfc,promedioAfc,promedioCaf,promedioConcaf,promedioConmebol,promedioUefa,promedioOfc)==0)
-		   {
-			   printf("\nSe realizaron correctamente los  Promedios");
-
-		   }
-		else
-		{
-			printf("\nDebe Ingresar los costos de Mantenimiento y Cargar jugadores");
-		}
-		}
-}
-int utn_promedioMercados(int*i,int*contadorAfc,int*contadorCaf,int*contadorConcaf,int*contadorConmebol,int*contadorUefa,int*contadorOfc,float*promedioAfc,float* promedioCaf,float*promedioConcaf,float*promedioConmebol,float*promedioUefa,float*promedioOfc)
-{
-	int retorno;
-	retorno=1;
-	if(contadorAfc!=NULL && contadorCaf!=NULL && contadorConcaf!=NULL && contadorConmebol !=NULL && contadorUefa !=NULL && contadorOfc !=NULL)
-	{
-	*promedioAfc = (float)(*contadorAfc)*100/(*i);
-	*promedioCaf = (float)(*contadorCaf)*100/(*i);
-	*promedioConcaf = (float)(*contadorConcaf)*100/(*i);
-	*promedioConmebol = (float)(*contadorConmebol)*100/(*i);
-	*promedioUefa = (float)(*contadorUefa)*100/(*i);
-	*promedioOfc = (float)(*contadorOfc)*100/(*i);
-	}
-	return retorno=0;
-	}
-void utn_mostrarPromedio(float*promedioAfc,float*promedioCaf,float*promedioConcaf,float*promedioConmebol,float*promedioUefa,float*promedioOfc)
-{
-					printf("\n Informar todos los Resultados"
-					"\nPorcentaje de AFC ->%.2f"
-					"\nPorcentaje de AFC ->%.2f"
-					"\nPorcentaje de AFC ->%.2f"
-					"\nPorcentaje de AFC ->%.2f"
-					"\nPorcentaje de AFC ->%.2f"
-					"\nPorcentaje de AFC ->%.2f",*promedioAfc,*promedioCaf,*promedioConcaf,*promedioConmebol,*promedioUefa,*promedioOfc);
-}
-void realizarCostos(int*banderaCostos,int*banderaCarga,int*banderaCalculos,int*sumaT,int*sumaH,int*sumaC,int*costoMantenimiento)
-{
-	if(banderaCostos!=NULL&&banderaCarga!=NULL&&*banderaCostos==1&&*banderaCarga==1)
-	{
-		if(utn_CostosMantenimiento(banderaCostos,banderaCarga,banderaCalculos,sumaT,sumaH,sumaC,costoMantenimiento)==0)
-		{
-			printf("\nSe realizaron correctamente los  CostosMantenimiento");
-		}
-}
-}
-int utn_CostosMantenimiento(int*banderaCostos,int*banderaCarga,int*banderaCalculos,int*sumaT,int*sumaH,int*sumaC,int*costoMantenimiento)
-{
-	int retorno;
-	retorno=1;
-	if(banderaCostos!=NULL&&banderaCarga!=NULL&&banderaCalculos!=NULL&&sumaT!=NULL&&sumaH!=NULL&&sumaC!=NULL&&costoMantenimiento!=NULL)
-	{
-		*costoMantenimiento = *costoMantenimiento + *sumaT + *sumaH+ *sumaC;
-	}
-	retorno=0;
-	return retorno;
-}
-void utn_mostrarCosto(int*costoMantenimiento)
-{
-	if(costoMantenimiento!=NULL)
-	{
-		printf("\nEl costo de mantenimiento: %d",*costoMantenimiento);
-	}
-}
-void utn_mayorContador(float*aumento,float*costoFinal,int*costoMantenimiento,int*contadorAfc,int*contadorCaf,int*contadorConcaf,int*contadorConmebol,int*contadorUefa,int*contadorOfc)
-{
-	if((*contadorUefa)>(*contadorAfc) && (*contadorUefa)>(*contadorCaf) && (*contadorUefa)>(*contadorConcaf) && (*contadorUefa)>(*contadorConmebol) && (*contadorUefa)>(*contadorOfc) )
-	{
-		*aumento = (*costoMantenimiento*35)/100;
-
-		*costoFinal = *costoMantenimiento + *aumento;
-		printf("\nMayor parte plantel compuesto por UEFA"
-			   "\nValor Original: %d"
-			   "\nEl valor del aumento: %.2f"
-			   "\nEl valor actualizado con el aumento agregado: %.2f",*costoMantenimiento,*aumento,*costoFinal);
-	}
 }

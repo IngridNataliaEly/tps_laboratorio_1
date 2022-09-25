@@ -1,6 +1,6 @@
 /*
  ============================================================================
- Name        : prueba.c
+ Name        : TrabajoPractico1.c
  Author      : 
  Version     :
  Copyright   : Your copyright notice
@@ -8,19 +8,20 @@
  ============================================================================
  */
 
+
 #include <stdio.h>
 #include <stdlib.h>
-#include "prueba.h"
+#include "datos.h"
+#include "calculos.h"
 
-
-#define TAM 5
-int main(void) {
+#define TAM 3
+int main(void){
 	setbuf(stdout, NULL);
 	int opcionMenu;
 	int banderaCostos=0;
 	int banderaCarga=0;
 	int banderaCalculos=0;
-	int banderadaCalculos=0;
+
 
 	int contadorArqueros;
 	int contadorDefensores;
@@ -75,20 +76,47 @@ int main(void) {
 			switch(opcionMenu)
 			{
 			case 1:
-				ingresoCostos(&banderaCostos,&sumaT,&sumaH,&sumaC,&costoMantenimiento);
+				if(i<TAM)
+				{
+					banderaCostos = 1;
+					ingresoCostos(&sumaT,&sumaH,&sumaC,&costoMantenimiento);
+				}
+				else
+				{
+					printf("\nSe a ingresado maximo de jugadores");
+				}
 				break;
 			case 2:
-				cargaJugadores(&banderaCostos,&banderaCarga,&contadorAfc,&contadorCaf,&contadorConcaf,&contadorConmebol,&contadorUefa,&contadorOfc,&contadorArqueros,&contadorDefensores,&contadorMediocampistas,&contadorDelanteros,&i);
+				if(banderaCostos==1)
+				{
+					cargaJugadores(&contadorAfc,&contadorCaf,&contadorConcaf,&contadorConmebol,&contadorUefa,&contadorOfc,&contadorArqueros,&contadorDefensores,&contadorMediocampistas,&contadorDelanteros,&i);
+					banderaCarga=1;
+				}
 				break;
 			case 3:
-				realizarCalculos(&banderaCostos,&banderaCarga,&banderaCalculos,&banderadaCalculos,&i,&contadorAfc,&contadorCaf,&contadorConcaf,&contadorConmebol,&contadorUefa,&contadorOfc,&promedioAfc,&promedioCaf,&promedioConcaf,&promedioConmebol,&promedioUefa,&promedioOfc);
-				realizarCostos(&banderaCostos,&banderaCarga,&banderaCalculos,&sumaT,&sumaH,&sumaC,&costoMantenimiento);
-
+				if(banderaCostos==1&&banderaCarga==1)
+				{
+					realizarCalculos(&i,&contadorAfc,&contadorCaf,&contadorConcaf,&contadorConmebol,&contadorUefa,&contadorOfc,&promedioAfc,&promedioCaf,&promedioConcaf,&promedioConmebol,&promedioUefa,&promedioOfc);
+					realizarCostos(&sumaT,&sumaH,&sumaC,&costoMantenimiento);
+					banderaCalculos=1;
+				}
+				else
+				{
+					printf("\nDebe Ingresar los costos de Mantenimiento y Cargar jugadores");
+				}
 				break;
 			case 4:
-				utn_mostrarPromedio(&promedioAfc,&promedioCaf,&promedioConcaf,&promedioConmebol,&promedioUefa,&promedioOfc);
-				utn_mostrarCosto(&costoMantenimiento);
-				utn_mayorContador(&aumento,&costoFinal,&costoMantenimiento,&contadorAfc,&contadorCaf,&contadorConcaf,&contadorConmebol,&contadorUefa,&contadorOfc);
+				if(banderaCalculos==1)
+				{
+					utn_mostrarPromedio(&promedioAfc,&promedioCaf,&promedioConcaf,&promedioConmebol,&promedioUefa,&promedioOfc);
+					utn_mostrarCosto(&costoMantenimiento);
+					utn_mayorContador(&aumento,&costoFinal,&costoMantenimiento,&contadorAfc,&contadorCaf,&contadorConcaf,&contadorConmebol,&contadorUefa,&contadorOfc);
+				}
+				else
+				{
+					printf("\nDebe realizar los calculos");
+				}
+
 				break;
 			}
 		}
