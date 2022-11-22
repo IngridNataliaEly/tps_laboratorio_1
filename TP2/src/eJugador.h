@@ -33,7 +33,7 @@ typedef struct{
 int menu(void);
 int menuModificacion(void);
 //ABM
-int eStr_Alta(eJugador*unJugador,int tam,eConfederacion *tipos,int size);
+int eStr_Alta(eJugador* puntJugador,int tamJugador,eConfederacion *pTipos,int tamConfe,int* id);
 int eStr_Baja(eJugador *jugador, int size, eConfederacion *tipos,int tam);
 eJugador eStr_CargarDatos(void);
 int eStr_BuscarPorID(eJugador* unJugador,int tam,int iD);
@@ -46,11 +46,12 @@ int eStr_Modificacion(eJugador* unJugador,int tam,eConfederacion*tipos,int size)
 
 void eStr_MostrarUno(eJugador unJugador,eConfederacion*tipos,int tam);
 int eStr_MostrarTodos(eJugador*unJugador,int tam,eConfederacion*tipos,int size);
-int subMenuInformes(void);
 int eStr_ObtenerIndexLibre(eJugador *unJugador,int tam);
 int eStr_BuscarPorID(eJugador *unJugador,int tam, int iD);
+void mostrarPersona(eJugador p, eConfederacion confederaciones[], int size_conf);
+
+int mostrarPersonas(eJugador lista[], int size, eConfederacion confederaciones[], int size_conf);
 
 
 
-void mostrarInformes(int opcion);
 #endif /* EJUGADOR_H_ */

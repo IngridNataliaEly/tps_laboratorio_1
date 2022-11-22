@@ -16,13 +16,6 @@
 #include "eConfederacion.h"
 
 
-
-
-static int eStr_ObtenerID(void);
-static int eStr_ObtenerID(void) {
-	static int idjugador = 0;
-	return idjugador++;
-}
 //MENU
 int menu(void)
 {
@@ -38,29 +31,29 @@ int menu(void)
 
 	return opcion;
 }
-int eStr_Alta(eJugador*unJugador,int tam,eConfederacion *tipos,int size)
+int eStr_Alta(eJugador* puntJugador,int tamJugador,eConfederacion *pTipos,int tamConfe,int* id)
 {
 	int rtn = 0;
 	eJugador auxJugador;
 	int index;
 
-	if(unJugador != NULL)
+	if(puntJugador != NULL && pTipos != NULL && tamConfe >= 0 && tamJugador >= 0)
 	{
-		index = eStr_ObtenerIndexLibre(unJugador,tam);
+		index = eStr_ObtenerIndexLibre(puntJugador,tamJugador);
 
 	    if (index != -1)
 		{
 			auxJugador = eStr_CargarDatos();
-			auxJugador.idConfederacion = eStr_AltaConfederacion(tipos,size);
-			auxJugador.id = eStr_ObtenerID();
+			auxJugador.idConfederacion = eStr_AltaConfederacion(pTipos,tamConfe);
+			auxJugador.id = (*id)++;
 			auxJugador.isEmpty = BUSSY;
-			*(unJugador+index) = auxJugador;
+			*(puntJugador+index) = auxJugador;
 
 			puts("¿DESEA CONTINUAR CON LA ALTA?");
 
 			if(utn_getCaracterSN()==0)
 			{
-				eStr_MostrarTodos(unJugador,tam,tipos,size);
+				eStr_MostrarTodos(puntJugador,tamJugador,pTipos,tamConfe);
 			rtn = 1;
 			}
 		}
@@ -123,11 +116,25 @@ int eStr_ObtenerIndexLibre(eJugador*unJugador,int tam)
 }
 eJugador eStr_CargarDatos(void) {
 	eJugador auxiliar;
-
+	int posicion;
 		utn_getNombre(auxiliar.nombre, "\nINGRESE NOMBRE DE JUGADOR: ", "ERROR!", 3, 50);
 
-		utn_getNombre(auxiliar.posicion, "\nINGRESE POSICION DEL JUGADOR: ","\nERROR! INGRESE POSICION DEL JUGADOR:  ", 5,25);
-
+		utn_getNumero(&posicion, "1. Arquero\n2. Defensor\n3. Mediocampista\n4. Delantero\nIngrese numero de posicion: ", "Error, reingrese numero de posicion: ", 1, 4,200);
+			switch(posicion)
+			{
+			case 1:
+				strcpy(auxiliar.posicion, "Arquero");
+				break;
+			case 2:
+				strcpy(auxiliar.posicion, "Defensor");
+				break;
+			case 3:
+				strcpy(auxiliar.posicion, "Mediocampista");
+				break;
+			case 4:
+				strcpy(auxiliar.posicion, "Delantero");
+				break;
+			}
 		utn_getShort(&auxiliar.numeroCamiseta, "\nINGRESE NUMERO DE CAMISETA: ", "\nERROR!INGRESE NUMERO DE CAMISETA;",0,100,5);
 
 		utn_getNumeroFlotante(&auxiliar.salario, "\nINGRESE SALARIO: ","ERROR! \nINGRESE SALARIO: ",0, 32100000, 50);
@@ -143,11 +150,12 @@ void eStr_MostrarUno(eJugador unJugador,eConfederacion*tipos,int tam)
 	if (unJugador.isEmpty == BUSSY && tipos != NULL && tam > 0 )
 	{
 		{
-		if (buscarTipos(tipos,tam,unJugador.id,descripcion)== 1)
+		if (cargarDescripcionConfederacion(tipos,tam,unJugador.idConfederacion,descripcion)== 1)
 		{
-			printf("\n|%-8d|%-16s|%-10s|%-8h|%-20c|%-8s|%-8h|"
+			printf("| %d  | %-50s | %-20s | %-15d | %-15.2f | %-20s |  %-15d|\n"
 					,unJugador.id, unJugador.nombre, unJugador.posicion
-					,unJugador.numeroCamiseta,descripcion,unJugador.salario,unJugador.aniosContrato);
+					,unJugador.numeroCamiseta,unJugador.salario,descripcion,unJugador.aniosContrato);
+
 			}
 		}
 	}
@@ -158,11 +166,11 @@ int eStr_MostrarTodos(eJugador*unJugador,int tam,eConfederacion*tipos,int size)
 	int rtn = 0;
 	int cantidad = 0;
 
-	puts("\n\t> LISTADO DE JUGADORES");
-	printf("================================================================================================\n"
-		   "|%-8s|%-16s|%-10s|%-4s|%-16s|%-8s|%-20s|",
-		   "ID","NOMBRE","POSICION","N º CAMISETA","CONFEDERACION","SALARIO","AÑOS de CONTRATO"
-		 "\n------------------------------------------------------------------------------------------------");
+	printf("                                          *** LISTA DE JUGADORES ***\n");
+		printf("--------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+		printf("| ID |                     NOMBRE                         |       POSICION       |  N DE CAMISETA  |     SUELDO      |     CONFEDERACION    | ANIOS CONTRATO |\n");
+		printf("--------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+
 	if (unJugador != NULL && tipos !=NULL&& tam > 0) {
 		for (i = 0; i < tam; i++) {
 			if ((*(unJugador + i)).isEmpty == BUSSY)
@@ -171,6 +179,7 @@ int eStr_MostrarTodos(eJugador*unJugador,int tam,eConfederacion*tipos,int size)
 				cantidad++;
 			}
 		}
+		printf("--------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
 	}
 	if (cantidad > 0) {
 		rtn = 1;
@@ -178,10 +187,12 @@ int eStr_MostrarTodos(eJugador*unJugador,int tam,eConfederacion*tipos,int size)
 
 	return rtn;
 }
+
 eJugador eStr_ModificarUno(eJugador unJugador)
 {
 	eJugador auxiliar = unJugador;
 	int opcion;
+	int posicion;
 	opcion = menuModificacion();
 	switch (opcion)
 	{
@@ -189,7 +200,22 @@ eJugador eStr_ModificarUno(eJugador unJugador)
 		utn_getNombre(auxiliar.nombre,"\nIngrese Nombre: ","\nERROR!Ingrese Nombre Valido: ", 100, 50);
 		break;
 	case 2:
-		utn_getString(auxiliar.posicion, "\nIngrese Posicion: ", "\nERROR!Ingrese Posicion Valida: ", 100);
+		utn_getNumero(&posicion, "1. Arquero\n2. Defensor\n3. Mediocampista\n4. Delantero\nIngrese numero de posicion: ", "Error, reingrese numero de posicion: ", 1, 4,1000);
+					switch(posicion)
+					{
+					case 1:
+						strcpy(auxiliar.posicion, "Arquero");
+						break;
+					case 2:
+						strcpy(auxiliar.posicion, "Defensor");
+						break;
+					case 3:
+						strcpy(auxiliar.posicion, "Mediocampista");
+						break;
+					case 4:
+						strcpy(auxiliar.posicion, "Delantero");
+						break;
+					}
 		break;
 	case 3:
 		utn_getShort(&auxiliar.numeroCamiseta, "\nIngrese Numero de Camiseta: ", "\nIngrese Numero de Camiseta: ",0,100,5);
@@ -277,35 +303,42 @@ int menuModificacion(void)
 
 	return opcion;
 }
-int subMenuInformes(void)
-{
-	int retorno;
-	printf("-------------------------------------------------------------------------------"
-	       "\n|1.Listado de los jugadores ordenados alfabéticamente.                        |"
-		   "\n|2.Listado de confederaciones con sus jugadores.                              |"
-		   "\n|3.Total y promedio de todos los salarios                                     |"
-		   "\n|4.Confederación con mayor cantidad de años de contratos total                |"
-		   "\n|5.Informar porcentaje de jugadores por cada confederación                    |"
-		   "\n|6.Informar cual es la región con más jugadores y el listado de los mismos.   |\n"
-		   "-------------------------------------------------------------------------------"
-				   );
-		utn_getNumero(&retorno, "\n|INGRESE OPCION:                  |\n", "ERROR ! ", 1, 5, 200);
+void mostrarPersona(eJugador p, eConfederacion confederaciones[], int size_conf){
+	char descConfederacion[20];
 
+	if(cargarDescripcionConfederacion(confederaciones, size_conf, p.idConfederacion, descConfederacion) == 1){
 
-
-
-	return retorno;
+	printf("│  %2d  │  %20s    │   %15s   │    %2d      │  %8.2f  │  %13s │      %2d        │\n",
+			p.id,
+			p.nombre,
+			p.posicion,
+			p.numeroCamiseta,
+			p.salario,
+			descConfederacion,
+			p.aniosContrato
+		   );
+	}
 }
-void mostrarInformes(int opcion){
-
-}
-int litadoConfederaciones(eJugador* unJugador,int tam,eConfederacion*tipos,int size)
-{
-	printf("|%-16s|%-20s |"
-			,"CONFEDERACION","NOMBRE JUGADOR"
-			"\n-----------------------------------------------------");
-	for (int i=0;i<size;i++)
-		{
-			printf("|%-16s|%-20s|",);
+int mostrarPersonas(eJugador lista[], int size, eConfederacion confederaciones[], int size_conf){
+	int todoOk = 1;
+	int flag = 1;
+	if(lista != NULL && size > 0 && confederaciones != NULL && size_conf > 0){
+		/*system("cls");*/
+		printf("                                               ***** Lista de jugadores *****     \n");
+		printf("=====================================================================================================================\n");
+		printf("│  ID  │         NOMBRE           │       POSICION      │ N°CAMISETA │   SUELDO   │ CONFEDERACION  │ ANIOS CONTRATO │\n");
+		printf("---------------------------------------------------------------------------------------------------------------------\n");
+		for(int i = 0; i < size; i++){
+			if(lista[i].isEmpty == 0){
+				mostrarPersona(lista[i], confederaciones, size_conf);
+				flag = 0;
+			}
 		}
+		if(flag == 1){
+			printf("No hay jugadores para mostrar\n");
+		}
+		printf("======================================================================================================================\n");
+		todoOk = 1;
+	}
+	return todoOk;
 }

@@ -13,13 +13,13 @@
 #include "calculos.h"
 #include "utn.h"
 
-int Carga_Costos(float *acumuladorCostosMant, float *gastoTrasporte,
+int Carga_Costos(float *gastoTrasporte,
 		float *gastoHospedaje, float *gastoComida) {
 
 	int respuesta;
 	char opcion;
 	int retorno = -1;
-	if (acumuladorCostosMant != NULL && gastoComida != NULL && gastoHospedaje != NULL && gastoTrasporte !=NULL) {
+	if ( gastoComida != NULL && gastoHospedaje != NULL && gastoTrasporte !=NULL) {
 		do {
 			printf("\nCosto de hospedaje -> $%.2f\n"
 						"Costo de comida -> $%.2f\n"

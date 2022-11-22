@@ -14,16 +14,7 @@
 #include "calculos.h"
 #include "utn.h"
 
-int Incremento_Costos(float gastoIngresado,float* acumuladorCostosMant)
-{
-	int retorno=-1;
-	if( acumuladorCostosMant != NULL && gastoIngresado >= 0)
-	{
-		*acumuladorCostosMant = *acumuladorCostosMant + gastoIngresado;
-		retorno = 0;
-	}
-	return retorno;
-}
+
 
 int calcular_Promedio(int contador ,int cantidadJugadores,float* promedio)
 {

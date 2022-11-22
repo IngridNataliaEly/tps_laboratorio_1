@@ -21,11 +21,28 @@ typedef struct{
 
 }eConfederacion;
 
-int buscarTipos(eConfederacion *tipos,int size,int idSectores,char *descripcion);
 
-int eStr_AltaConfederacion(eConfederacion *tipos,int size);
-void listaConfederaciones(eConfederacion *tipos,int size);
-eConfederacion eStr_CargarDatosConfederacion(eConfederacion*tipos,int size);
+int altaConfederacion(eConfederacion confederaciones[], int* pId, int size_conf);
+
+int modificarConfederacion(eConfederacion confederaciones[], int size_conf);
+
+int menuModificarConf();
+
+int buscarConfederacionId(eConfederacion confederaciones[],int Id, int size_conf);
+
+int cargarDescripcionConfederacion(eConfederacion confederaciones[], int size,int idConfederacion, char descripcion[]);
+
+void mostrarConfederacion(eConfederacion confederacion);
+
+int mostrarConfederaciones(eConfederacion confederaciones[], int size);
+
+int validarIdConfederacion(int id, eConfederacion confederaciones[], int size);
+
+int eStr_AltaConfederacion(eConfederacion*tipos,int size);
+
+
+eConfederacion eStr_CargarDatosConfederacion(eConfederacion *tipos,int size);
+
 
 
 #endif /* ECONFEDERACION_H_ */
