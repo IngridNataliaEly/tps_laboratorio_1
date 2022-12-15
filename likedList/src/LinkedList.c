@@ -60,8 +60,12 @@ static Node* getNode(LinkedList* this, int nodeIndex)
         pNode = listAux.pFirstNode;
 
         for(int i = 0; i<nodeIndex; i++){
-           pNode = pNode->pNextNode;
+
+        	pNode = pNode->pNextNode;
+
+
         }
+        nodeIndex --;
     }
 
     return pNode;
@@ -102,8 +106,6 @@ static int addNode(LinkedList* this, int nodeIndex,void* pElement)
         if(nodoNew!=NULL)
         {
             nodoNew->pElement=pElement;
-            nodoNew->pNextNode=NULL;
-
             if(nodeIndex==0)
             {
                 nodoNew->pNextNode=this->pFirstNode;
@@ -112,10 +114,12 @@ static int addNode(LinkedList* this, int nodeIndex,void* pElement)
             else
             {
                 nodoAux=getNode(this,nodeIndex-1);
+                if(nodoAux != NULL)
+                {
                 nodoNew->pNextNode=nodoAux->pNextNode;
                 nodoAux->pNextNode=nodoNew;
+                }
             }
-
             this->size++;
             returnAux=0;
         }
