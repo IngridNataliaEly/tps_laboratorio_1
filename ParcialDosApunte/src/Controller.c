@@ -16,14 +16,23 @@
  *
  */
 
-int controller_cargarComprasDesdeTexto(char* path,LinkedList* listaCompras) {//esta funcion retorna un entero y recibe por parametro
-	int retorno = -1; 														//puntero = apunta y accede a una direcion de memoria(referecia)
-	FILE* pfile = NULL;															//sea a una funcion o una vaariable
-	//declaro variable de tipo puntero a archivo  y la inicializo en NULL.
-	if (path != NULL && listaCompras != NULL && ll_len(listaCompras) >= 0) {
+int controller_cargarComprasDesdeTexto(char* path,LinkedList* listaCompras) {
+	//esta funcion retorna un entero y recibe por parametro
+	//puntero = apunta y accede a una direcion de memoria(referecia)
+	//sea a una funcion o una vaariable
+	int retorno = -1;
+	FILE* pfile = NULL;//FILE ES UNA ESTRUCTURA QUE VA A GUARDAR LA INFORMACION DE MIS ARCHIVOS.
+						//declaro variable de tipo puntero a archivo  y la inicializo en NULL.
+	//'pfile' ES EL PUNNTERO A LA ESTRUCTURA FILE:
+	if (path != NULL && listaCompras != NULL && ll_len(listaCompras) >= 0) {//hag las validaciones correspondientes
 		pfile = fopen(path, "r");
+		 //FUNCION F-OPEN
+		 //QUUIERO QUE SE ABTRA ESTE ARCHIVO PORQUE LO TENGO QUE MANIPULAR
+		 //fopen(path,Modo)
+		 //*Path :  ME VA A PEDIR LA RUTA DE DONDE ESTA
+		 //Modo : PARA QUE Y COMO LO QUERES ABRIR:
 		if (pfile != NULL) {
-			if (parser_ComprasFromText(pfile, listaCompras) != -1) { //Lo leo  al archivo linea por linea con parcer
+			if (parser_ComprasFromText(pfile, listaCompras) != -1) { //Lo leo  al archivo linea por linea con parser
 			
 			}
 		} else {

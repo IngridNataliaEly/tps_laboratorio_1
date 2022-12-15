@@ -2,7 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include "LinkedList.h"
-
+//esto va a estar en el heap, tengo que crearlo en el heap (Segmento del Heap: En este segmento se guardan
+//las variables que han sido creadas dinámicamente en tiempo de ejecución). Esto simplemente es un puntero
+//que está en la pila.¿Cómo hago para crearlo en el montón?
+//Bueno, hay un constructor.Voy a hacer mi lista igual. Ll todas las funciones del link que empiezan con él
+//.Guión bajo.Guión bajo abajo, no guión bajo.New Link.Hora.Entonces, esta función me creo la lista memoria.
+//Y yo ahora quiero agregar cosas a la lista, tengo que primero crearla.
 static Node* getNode(LinkedList *this, int nodeIndex);
 static int addNode(LinkedList *this, int nodeIndex, void *pElement);
 
